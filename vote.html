@@ -1,6 +1,7 @@
 <h1>Vote Status for {{.Title}}</h1>
 <h2>Members</h2>
-<ul>
-   {{range $member := .Members}} <div><li>{{printf "%s" $member}} </div></li>{{end}}
-</ul>
-<button type="submit" formaction="{{ printf "/register/%s" .Title}}">Add</button>
+<dl>
+	{{range $member, $hitokoto := .Members}} <dt>{{printf "%s" $member}} </dt> <dd> - {{printf "%s" $hitokoto}} </dd>{{end}}
+</dl>
+<p><a href="{{ printf "/register/%s" .Title}}">Register</a></p>
+<p><a href="{{ printf "/unregister/%s" .Title}}">Unregister</a></p>
