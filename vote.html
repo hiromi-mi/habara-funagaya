@@ -1,0 +1,6 @@
+<h1>Vote Status for {{.Title}}</h1>
+<h2>Members</h2>
+<ul>
+   {{range $member := .Members}} <div><li>{{printf "%s" $member}} </div></li>{{end}}
+</ul>
+<button type="submit" formaction="{{ printf "/register/%s" .Title}}">Add</button>
