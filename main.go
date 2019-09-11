@@ -8,6 +8,7 @@ import (
 	"regexp"
 )
 
+// Event All Event Lists
 type Event struct {
 	Title   string
 	Members map[string]string
