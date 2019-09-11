@@ -2,6 +2,7 @@ package main
 
 import (
 	//"errors"
+	//"database/sql"
 	"html/template"
 	"log"
 	"net/http"
@@ -14,20 +15,28 @@ type Event struct {
 	Members map[string]string
 }
 
-var events = make(map[string]Event)
+var events = make(map[string]*Event)
 
-var templates = template.Must(template.ParseFiles("vote.html"))
+var templates = template.Must(template.ParseFiles("vote.html", "new.html"))
 var validPath = regexp.MustCompile("^/(events|new|register|unregister)/([a-zA-Z0-9]+)$")
 
-func eventshandler(w http.ResponseWriter, r *http.Request) {
-	m := validPath.FindStringSubmatch(r.URL.Path)
-	if m == nil {
-		http.NotFound(w, r)
-		return
+func metahandler(fn func(w http.ResponseWriter, r *http.Request, title string)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		m := validPath.FindStringSubmatch(r.URL.Path)
+		if m == nil {
+			http.NotFound(w, r)
+			return
+		}
+		title := m[2]
+		fn(w, r, title)
 	}
-	event, ok := events[m[2]]
+}
+
+func eventshandler(w http.ResponseWriter, r *http.Request, title string) {
+	event, ok := events[title]
 	if !ok {
-		http.Redirect(w, r, "/new/"+m[2], http.StatusFound)
+		http.NotFound(w, r)
+		//http.Redirect(w, r, "/new/", http.StatusFound)
 		return
 	}
 	err := templates.ExecuteTemplate(w, "vote.html", event)
@@ -35,42 +44,48 @@ func eventshandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
-func registershandler(w http.ResponseWriter, r *http.Request) {
-	m := validPath.FindStringSubmatch(r.URL.Path)
-	if m == nil {
-		http.NotFound(w, r)
-		return
-	}
-	event, ok := events[m[2]]
+func registershandler(w http.ResponseWriter, r *http.Request, title string) {
+	event, ok := events[title]
 	if !ok {
 		http.NotFound(w, r)
 		return
 	}
 	event.Members["hiromi_mi"] = "aaa"
-	events[m[2]] = event
-	http.Redirect(w, r, "/events/"+m[2], http.StatusFound)
+	events[title] = event
+	http.Redirect(w, r, "/events/"+title, http.StatusFound)
 }
-func unregistershandler(w http.ResponseWriter, r *http.Request) {
-	m := validPath.FindStringSubmatch(r.URL.Path)
-	if m == nil {
-		http.NotFound(w, r)
-		return
-	}
-	event, ok := events[m[2]]
+func unregistershandler(w http.ResponseWriter, r *http.Request, title string) {
+	event, ok := events[title]
 	if !ok {
 		http.NotFound(w, r)
 		return
 	}
 	delete(event.Members, "hiromi_mi")
-	events[m[2]] = event
-	http.Redirect(w, r, "/events/"+m[2], http.StatusFound)
+	events[title] = event
+	http.Redirect(w, r, "/events/"+title, http.StatusFound)
+}
+
+func neweventhandler(w http.ResponseWriter, r *http.Request) {
+	err := templates.ExecuteTemplate(w, "new.html", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func createeventhandler(w http.ResponseWriter, r *http.Request) {
+	title := r.FormValue("eventname") // get POST
+	// TODO should verlidate
+	events[title] = &Event{Title: title, Members: make(map[string]string)}
+	http.Redirect(w, r, "/events/"+title, http.StatusFound)
 }
 
 func main() {
-	p := Event{Title: "TestEvent", Members: make(map[string]string)}
+	p := &Event{Title: "TestEvent", Members: make(map[string]string)}
 	events[p.Title] = p
-	http.HandleFunc("/events/", eventshandler)
-	http.HandleFunc("/register/", registershandler)
-	http.HandleFunc("/unregister/", unregistershandler)
+	http.HandleFunc("/events/", metahandler(eventshandler))
+	http.HandleFunc("/create/", createeventhandler)
+	http.HandleFunc("/new/", neweventhandler)
+	http.HandleFunc("/register/", metahandler(registershandler))
+	http.HandleFunc("/unregister/", metahandler(unregistershandler))
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
