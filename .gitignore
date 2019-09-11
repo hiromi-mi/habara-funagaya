@@ -13,3 +13,6 @@
 habara-funagaya
 yarn.lock
 node_modules/
+
+static/milligram.min.css.map
+static/style.css

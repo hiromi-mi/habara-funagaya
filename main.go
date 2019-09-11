@@ -88,7 +88,8 @@ func createeventhandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	p := &Event{Title: "TestEvent", Members: make(map[string]string)}
 	events[p.Title] = p
-	http.HandleFunc("/", indexhandler)
+	http.HandleFunc("/index.html", indexhandler)
+	http.Handle("/", http.FileServer(http.Dir("static/")))
 	http.HandleFunc("/events/", metahandler(eventshandler))
 	http.HandleFunc("/create/", createeventhandler)
 	http.HandleFunc("/new/", neweventhandler)

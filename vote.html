@@ -1,7 +1,16 @@
-<h1>Vote Status for {{.Title}}</h1>
-<h2>Members</h2>
-<dl>
-	{{range $member, $hitokoto := .Members}} <dt>{{printf "%s" $member}} </dt> <dd> - {{printf "%s" $hitokoto}} </dd>{{end}}
-</dl>
-<p><a href="{{ printf "/register/%s" .Title}}">Register</a></p>
-<p><a href="{{ printf "/unregister/%s" .Title}}">Unregister</a></p>
+<!doctype html>
+<html lang="ja">
+   <head>
+      <meta charset="UTF-8">
+      <link href="/style.css" rel="stylesheet">
+   </head>
+   <body>
+      <h1>Vote Status for {{.Title}}</h1>
+      <h2>Members</h2>
+      <dl>
+         {{range $member, $hitokoto := .Members}} <dt>{{printf "%s" $member}} </dt> <dd> - {{printf "%s" $hitokoto}} </dd>{{end}}
+      </dl>
+      <p><a class="button" href="{{ printf "/register/%s" .Title}}">Register</a></p>
+      <p><a class="button" href="{{ printf "/unregister/%s" .Title}}">Unregister</a></p>
+   </body>
+</html>

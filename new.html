@@ -1,9 +1,18 @@
-<h1>Register New Event</h1>
-<form action="/create/" method="post">
-<label>
-   Event Name: 
-   <!-- should not use id instead of name -->
-<input type="text" name="eventname" required>
-<input type="submit" value="Register">
-</label>
-</form>
+<!doctype html>
+<html lang="ja">
+   <head>
+      <meta charset="UTF-8">
+      <link href="/style.css" rel="stylesheet">
+   </head>
+   <body>
+      <h1>Register New Event</h1>
+      <form action="/create/" method="post">
+         <fieldset>
+         <label> Event Name: </label>
+            <!-- should not use id instead of name -->
+            <input type="text" name="eventname" required>
+            <input class="button button-primary" type="submit" value="Register">
+         </fieldset>
+      </form>
+   </body>
+</html>

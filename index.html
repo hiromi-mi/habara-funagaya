@@ -1,7 +1,19 @@
-<h1>habara-funagaya</h1>
-<p>
-   今後の出来事
-   <ul>
-      {{range $eventname, $event := .}} <li><a href="{{printf "/events/%s" $eventname}}">{{printf "%s" $eventname}}</a></li> {{end}}
-   </ul>
-</p>
+<!doctype html>
+<html lang="ja">
+   <head>
+      <meta charset="UTF-8">
+      <link href="style.css" rel="stylesheet">
+   </head>
+   <body>
+      <h1>habara-funagaya</h1>
+      <p>
+         今後の出来事
+         <ul>
+            {{range $eventname, $event := .}} <li><a href="{{printf "/events/%s" $eventname}}">{{printf "%s" $eventname}}</a></li> {{end}}
+         </ul>
+      </p>
+      <p>
+         <a href="/new/" class="button">New Event</a>
+      </p>
+   </body>
+</html>
