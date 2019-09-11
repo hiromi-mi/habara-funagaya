@@ -19,6 +19,7 @@ var events = make(map[string]*Event)
 
 var templates = template.Must(template.ParseFiles("vote.html", "new.html", "index.html"))
 var validPath = regexp.MustCompile("^/(events|new|register|unregister)/([a-zA-Z0-9]+)$")
+var validTitle = regexp.MustCompile("^[a-zA-Z0-9]+$")
 
 func metahandler(fn func(w http.ResponseWriter, r *http.Request, title string)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -79,8 +80,11 @@ func indexhandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createeventhandler(w http.ResponseWriter, r *http.Request) {
-	title := r.FormValue("eventname") // get POST
-	// TODO should verlidate
+	title_raw := r.FormValue("eventname") // get POST
+	title := validTitle.FindString(title_raw)
+	if title == "" {
+		http.Error(w, "Event Name Not Found", http.StatusInternalServerError)
+	}
 	events[title] = &Event{Title: title, Members: make(map[string]string)}
 	http.Redirect(w, r, "/events/"+title, http.StatusFound)
 }
