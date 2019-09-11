@@ -6,8 +6,8 @@
    </head>
    <body>
       <h1>habara-funagaya</h1>
+      <h2>今後の出来事</h2>
       <p>
-         今後の出来事
          <ul>
             {{range $eventname, $event := .}} <li><a href="{{printf "/events/%s" $eventname}}">{{printf "%s" $eventname}}</a></li> {{end}}
          </ul>
