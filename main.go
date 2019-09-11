@@ -46,12 +46,14 @@ func eventshandler(w http.ResponseWriter, r *http.Request, title string) {
 	}
 }
 func registershandler(w http.ResponseWriter, r *http.Request, title string) {
+	hitokoto_raw := r.FormValue("hitokoto")
+	hitokoto := template.HTMLEscapeString(hitokoto_raw)
 	event, ok := events[title]
 	if !ok {
 		http.NotFound(w, r)
 		return
 	}
-	event.Members["hiromi_mi"] = "aaa"
+	event.Members["hiromi_mi"] = hitokoto
 	events[title] = event
 	http.Redirect(w, r, "/events/"+title, http.StatusFound)
 }
