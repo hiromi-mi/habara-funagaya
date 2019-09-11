@@ -17,7 +17,7 @@ type Event struct {
 
 var events = make(map[string]*Event)
 
-var templates = template.Must(template.ParseFiles("vote.html", "new.html"))
+var templates = template.Must(template.ParseFiles("vote.html", "new.html", "index.html"))
 var validPath = regexp.MustCompile("^/(events|new|register|unregister)/([a-zA-Z0-9]+)$")
 
 func metahandler(fn func(w http.ResponseWriter, r *http.Request, title string)) http.HandlerFunc {
@@ -71,6 +71,12 @@ func neweventhandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+func indexhandler(w http.ResponseWriter, r *http.Request) {
+	err := templates.ExecuteTemplate(w, "index.html", events)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
 
 func createeventhandler(w http.ResponseWriter, r *http.Request) {
 	title := r.FormValue("eventname") // get POST
@@ -82,6 +88,7 @@ func createeventhandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	p := &Event{Title: "TestEvent", Members: make(map[string]string)}
 	events[p.Title] = p
+	http.HandleFunc("/", indexhandler)
 	http.HandleFunc("/events/", metahandler(eventshandler))
 	http.HandleFunc("/create/", createeventhandler)
 	http.HandleFunc("/new/", neweventhandler)
