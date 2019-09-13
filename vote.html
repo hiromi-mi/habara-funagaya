@@ -3,6 +3,11 @@
    <head>
       <meta charset="UTF-8">
       <link href="/style.css" rel="stylesheet">
+<style>
+.fluxbox_styled {
+   display: flex;
+}
+</style>
    </head>
    <body>
       <h1>Vote Status for {{.Title}}</h1>
@@ -14,12 +19,17 @@
 		  <form action="{{ printf "/register/%s" .Title}}" method="POST">
 			  <fieldset>
 				  <label>Register as: </label>
+                                  <div class="fluxbox_styled">
+                                  <input type="text" name="id" required>
 				  <input type="text" name="hitokoto" required>
 				  <input class="button" type="submit" value="Register">
+                                  </div>
 			  </fieldset>
 		  </form>
 	  </p>
+          <div class="fluxbox_styled">
       <p><a class="button" href="{{ printf "/unregister/%s" .Title}}">Unregister</a></p>
       <p><a class="button" href="/index.html">Go to index</a></p>
+          </div>
    </body>
 </html>
