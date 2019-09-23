@@ -27,8 +27,12 @@
 			  </fieldset>
 		  </form>
 	  </p>
+		  <form action="{{ printf "/unregister/%s" .Title}}" method="POST">
           <div class="fluxbox_styled">
-      <p><a class="button" href="{{ printf "/unregister/%s" .Title}}">Unregister</a></p>
+				<input type="text" name="id2">
+				<input class="button" type="submit" value="Unregister">
+		  </div>
+		  </form>
       <p><a class="button" href="/index.html">Go to index</a></p>
           </div>
    </body>

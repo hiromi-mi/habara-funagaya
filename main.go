@@ -65,7 +65,9 @@ func unregistershandler(w http.ResponseWriter, r *http.Request, title string) {
 		http.NotFound(w, r)
 		return
 	}
-	delete(event.Members, "hiromi_mi")
+	id_raw := r.FormValue("id2")
+	id := template.HTMLEscapeString(id_raw)
+	delete(event.Members, id)
 	events[title] = event
 	http.Redirect(w, r, "/events/"+title, http.StatusFound)
 }
