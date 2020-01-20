@@ -46,10 +46,10 @@ func eventshandler(w http.ResponseWriter, r *http.Request, title string) {
 	}
 }
 func registershandler(w http.ResponseWriter, r *http.Request, title string) {
-	id_raw := r.FormValue("id")
-	id := template.HTMLEscapeString(id_raw)
-	hitokoto_raw := r.FormValue("hitokoto")
-	hitokoto := template.HTMLEscapeString(hitokoto_raw)
+	idRaw := r.FormValue("id")
+	id := template.HTMLEscapeString(idRaw)
+	hitokotoRaw := r.FormValue("hitokoto")
+	hitokoto := template.HTMLEscapeString(hitokotoRaw)
 	event, ok := events[title]
 	if !ok {
 		http.NotFound(w, r)
@@ -65,8 +65,8 @@ func unregistershandler(w http.ResponseWriter, r *http.Request, title string) {
 		http.NotFound(w, r)
 		return
 	}
-	id_raw := r.FormValue("id2")
-	id := template.HTMLEscapeString(id_raw)
+	idRaw := r.FormValue("id2")
+	id := template.HTMLEscapeString(idRaw)
 	delete(event.Members, id)
 	events[title] = event
 	http.Redirect(w, r, "/events/"+title, http.StatusFound)
@@ -86,8 +86,8 @@ func indexhandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createeventhandler(w http.ResponseWriter, r *http.Request) {
-	title_raw := r.FormValue("eventname") // get POST
-	title := validTitle.FindString(title_raw)
+	titleRaw := r.FormValue("eventname") // get POST
+	title := validTitle.FindString(titleRaw)
 	if title == "" {
 		http.Error(w, "Event Name Not Found", http.StatusInternalServerError)
 	}
