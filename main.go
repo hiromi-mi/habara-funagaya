@@ -2,7 +2,8 @@ package main
 
 import (
 	//"errors"
-	//"database/sql"
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
 	"html/template"
 	"log"
 	"net/http"
@@ -105,5 +106,15 @@ func main() {
 	http.HandleFunc("/new/", neweventhandler)
 	http.HandleFunc("/register/", metahandler(registershandler))
 	http.HandleFunc("/unregister/", metahandler(unregistershandler))
+
+	// Connect to sqlite database
+	db, err := sql.Open("sqlite3", "./foo.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// defer を用い閉じられることを保証
+	defer db.Close()
+
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

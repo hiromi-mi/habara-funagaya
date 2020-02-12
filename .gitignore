@@ -16,3 +16,4 @@ node_modules/
 
 static/milligram.min.css.map
 static/style.css
+*.db

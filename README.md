@@ -9,3 +9,6 @@ $ ./habara-funagaya
 ```
 
 Then see `localhost:8080/index.html`
+
+# Dependencies
+* https://github.com/mattn/go-sqlite3 : MIT License
